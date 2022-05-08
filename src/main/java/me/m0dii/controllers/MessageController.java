@@ -107,6 +107,4 @@ public class MessageController
     
         return ResponseEntity.ok(new MessageResponse("Message successfully sent."));
     }
-    
-    
 }

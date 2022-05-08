@@ -51,7 +51,7 @@ public class AuthController
     @Autowired
     JwtUtils jwtUtils;
     
-    @PostMapping("/signin")
+    @PostMapping({"/signin", "/login"})
     public ResponseEntity<UserInfoResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest)
     {
         Authentication authentication = authenticationManager
@@ -67,15 +67,15 @@ public class AuthController
                 .map(GrantedAuthority::getAuthority)
                 .toList();
         
-        return ResponseEntity.ok(
-                new UserInfoResponse(jwtCookie.toString(),
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(new UserInfoResponse(jwtCookie.toString(),
                         userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
                         roles));
     }
     
-    @PostMapping("/signup")
+    @PostMapping({"/signup", "/register"})
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
     {
         if (Boolean.TRUE.equals(userRepository.existsByUsername(signUpRequest.getUsername())))
