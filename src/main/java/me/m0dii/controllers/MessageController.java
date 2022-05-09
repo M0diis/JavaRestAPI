@@ -101,7 +101,8 @@ public class MessageController
             return ResponseEntity.ok(new MessageResponse("User not found."));
         }
 
-        Message message = new Message(currentUser.get().getEmail(), receiver.get().getEmail(), messageRequest.getContent());
+        Message message = new Message(currentUser.get().getEmail(),
+                receiver.get().getEmail(), messageRequest.getContent());
         
         messageRepository.save(message);
     

@@ -1,12 +1,9 @@
 .idea
 .gradle
-./gradle/*
 ./build/*
 ./build/
 
+lib/
+
 ./lib/
 ./lib/*
-
-gradlew.bat
-gradlew
-/gradle/wrapper/
