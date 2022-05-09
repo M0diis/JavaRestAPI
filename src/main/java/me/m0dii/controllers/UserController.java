@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,12 +35,6 @@ public class UserController
     public List<User> getUsers()
     {
         return userRepository.findAll();
-    }
-    
-    @PostMapping("/create")
-    public User createUser(User user)
-    {
-        return userRepository.save(user);
     }
     
     @GetMapping("/get/{id}")
@@ -72,8 +67,8 @@ public class UserController
         return ResponseEntity.ok(new UserStatResponse(
                 user,
                 messageCount,
-                getMessageDate(user, true),
                 getMessageDate(user, false),
+                getMessageDate(user, true),
                 getAverageMessageContentLength(user),
                 getLastMessageContent(user))
         );
@@ -102,14 +97,22 @@ public class UserController
         return message.isPresent() ? message.get().getContent() : "";
     }
     
-    private Date getMessageDate(User user, boolean first)
+    private String getMessageDate(User user, boolean last)
     {
-        if(first)
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        if(last)
         {
-            return messageRepository.findFirstBySenderEmailOrderByTimestampDesc(user.getEmail()).map(Message::getDate).orElse(null);
+            Date date = messageRepository.findFirstBySenderEmailOrderByTimestampDesc(user.getEmail())
+                    .map(Message::getDate).orElse(null);
+            
+            return date != null ? sdf.format(date) : "";
         }
         
-        return messageRepository.findFirstBySenderEmailOrderByTimestampAsc(user.getEmail()).map(Message::getDate).orElse(null);
+        Date date = messageRepository.findFirstBySenderEmailOrderByTimestampAsc(user.getEmail())
+                .map(Message::getDate).orElse(null);
+        
+        return date != null ? sdf.format(date) : "";
     }
 }
 

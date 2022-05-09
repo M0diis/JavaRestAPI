@@ -10,15 +10,15 @@ public class UserStatResponse
     
     private int messageCount;
     
-    private Date firstMessageDate;
+    private String firstMessageDate;
     
-    private Date lastMessageDate;
+    private String lastMessageDate;
     
     private double averageMessageLength;
     
     private String lastMessageContent;
     
-    public UserStatResponse(User user, int messageCount, Date firstMessage, Date lastMessage, double averageMessageLength,
+    public UserStatResponse(User user, int messageCount, String firstMessage, String lastMessage, double averageMessageLength,
                             String lastMessageContent)
     {
         this.user = user;
@@ -38,12 +38,12 @@ public class UserStatResponse
         return messageCount;
     }
     
-    public Date getFirstMessageDate()
+    public String getFirstMessageDate()
     {
         return firstMessageDate;
     }
     
-    public Date getLastMessageDate()
+    public String getLastMessageDate()
     {
         return lastMessageDate;
     }

@@ -18,36 +18,30 @@ public class TestController
         this.userRepository = userRepository;
     }
     
-    @GetMapping("/getAllUsers")
-    public String getAllUsers()
-    {
-        return userRepository.findAll().toString();
-    }
-    
     @GetMapping("/all")
     public String allAccess()
     {
-        return "Public Content.";
+        return "Public content.";
     }
     
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER', 'MOD','ADMIN')")
     public String userAccess()
     {
-        return "User Content.";
+        return "User (logged-in) only content.";
     }
     
     @GetMapping("/mod")
     @PreAuthorize("hasRole('MOD')")
     public String moderatorAccess()
     {
-        return "Moderator Board.";
+        return "Moderator content.";
     }
     
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String adminAccess()
     {
-        return "Admin Board.";
+        return "Admin content.";
     }
 }

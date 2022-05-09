@@ -32,11 +32,14 @@ public class JwtUtils
         
         return cookie != null ? cookie.getValue() : null;
     }
+    
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal)
     {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         
-        return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60L).httpOnly(true).build();
+        return ResponseCookie.from(jwtCookie, jwt)
+                .path("/api").maxAge(24 * 60 * 60L)
+                .httpOnly(true).build();
     }
     
     public ResponseCookie getCleanJwtCookie()
