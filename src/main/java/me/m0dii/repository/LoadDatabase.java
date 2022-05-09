@@ -38,15 +38,20 @@ public class LoadDatabase
             Optional<Role> userRole = roleRepo.findByName(ERole.ROLE_USER);
             
             userRole.ifPresent(roles::add);
-            
-            log.info("Preloading user:" + userRepo.save(
-                    new User("admin", "admin@admin.com", encoder.encode("admin123"), roles)));
     
-            userRole.ifPresent(role -> {
-                log.info("Preloading user:" + userRepo.save(
-                        new User("user", "user@user.com", encoder.encode("user123"), role)));
-            });
+            preloadUser(userRepo, new User("admin", "admin@admin.com", encoder.encode("admin123"), roles));
+            userRole.ifPresent(role -> preloadUser(userRepo, new User("user", "user@user.com", encoder.encode("user123"), role)));
         };
+    }
+    
+    void preloadUser(UserRepository repo, User user)
+    {
+        if (repo.findByUsername(user.getUsername()).isPresent())
+        {
+            return;
+        }
+        
+        log.info("Preloading user: " + repo.save(user));
     }
     
     void preloadRole(RoleRepository repo, ERole role)
