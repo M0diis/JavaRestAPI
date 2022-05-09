@@ -1,12 +1,18 @@
 package me.m0dii.controllers;
 
 import me.m0dii.advices.UserNotFoundException;
+import me.m0dii.models.Message;
 import me.m0dii.models.User;
+import me.m0dii.payload.response.UserStatResponse;
+import me.m0dii.repository.MessageRepository;
 import me.m0dii.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,9 +21,13 @@ public class UserController
 {
     private final UserRepository userRepository;
     
-    public UserController(UserRepository userRepository)
+    private final MessageRepository messageRepository;
+    
+    public UserController(UserRepository userRepository, MessageRepository messageRepository)
     {
         this.userRepository = userRepository;
+        
+        this.messageRepository = messageRepository;
     }
 
     @GetMapping("/all")
@@ -52,10 +62,54 @@ public class UserController
         });
     }
     
-    @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable Long id)
+    @GetMapping("/statistics/{id}")
+    public ResponseEntity<UserStatResponse> getStatistics(@PathVariable Long id)
     {
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        
+        int messageCount = messageRepository.countBySenderEmail(user.getEmail());
+        
+        return ResponseEntity.ok(new UserStatResponse(
+                user,
+                messageCount,
+                getMessageDate(user, true),
+                getMessageDate(user, false),
+                getAverageMessageContentLength(user),
+                getLastMessageContent(user))
+        );
+    }
+    
+    private double getAverageMessageContentLength(User user)
+    {
+        Optional<List<Message>> messages = messageRepository.findBySenderEmail(user.getEmail());
+        
+        if(messages.isEmpty())
+        {
+            return 0;
+        }
+    
+        double messageCount = messages.get().size();
+        
+        double totalMessageLength = messages.get().stream().mapToInt(msg -> msg.getContent().length()).sum();
+        
+        return totalMessageLength / messageCount;
+    }
+    
+    private String getLastMessageContent(User user)
+    {
+        Optional<Message> message = messageRepository.findFirstBySenderEmailOrderByTimestampDesc(user.getEmail());
+        
+        return message.isPresent() ? message.get().getContent() : "";
+    }
+    
+    private Date getMessageDate(User user, boolean first)
+    {
+        if(first)
+        {
+            return messageRepository.findFirstBySenderEmailOrderByTimestampDesc(user.getEmail()).map(Message::getDate).orElse(null);
+        }
+        
+        return messageRepository.findFirstBySenderEmailOrderByTimestampAsc(user.getEmail()).map(Message::getDate).orElse(null);
     }
 }
 

@@ -10,4 +10,11 @@ public interface MessageRepository extends JpaRepository<Message, Long>
 {
     Optional<List<Message>> findBySenderEmail(String senderEmail);
     Optional<List<Message>> findByReceiverEmail(String receiverEmail);
+    
+    int countBySenderEmail(String senderEmail);
+    int countByReceiverEmail(String receiverEmail);
+    
+    Optional<Message> findFirstBySenderEmailOrderByTimestampDesc(String senderEmail);
+    
+    Optional<Message> findFirstBySenderEmailOrderByTimestampAsc(String senderEmail);
 }
