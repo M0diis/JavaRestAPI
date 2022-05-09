@@ -113,6 +113,7 @@ class RestApiApplicationTests
             .header("Authorization", "Bearer " + cookie.getValue()))
             .andExpect(status().isForbidden());
     }
+    
     @Test
     void checkAdminAccessWithAuthorizationAsAdmin() throws Exception
     {
