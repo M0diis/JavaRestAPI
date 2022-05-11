@@ -16,48 +16,42 @@ import java.util.Optional;
 import java.util.Set;
 
 @Configuration
-public class LoadDatabase
-{
+public class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
-    
+
     @Autowired
     PasswordEncoder encoder;
-    
+
     @Bean
-    CommandLineRunner preloadRoles(RoleRepository roleRepo, UserRepository userRepo)
-    {
+    CommandLineRunner preloadRoles(RoleRepository roleRepo, UserRepository userRepo) {
         return args -> {
             preloadRole(roleRepo, ERole.ROLE_USER);
             preloadRole(roleRepo, ERole.ROLE_MOD);
             preloadRole(roleRepo, ERole.ROLE_ADMIN);
-            
+
             Set<Role> roles = new HashSet<>();
-    
+
             roleRepo.findByName(ERole.ROLE_ADMIN).ifPresent(roles::add);
-            
+
             Optional<Role> userRole = roleRepo.findByName(ERole.ROLE_USER);
-            
+
             userRole.ifPresent(roles::add);
-    
+
             preloadUser(userRepo, new User("admin", "admin@admin.com", encoder.encode("admin123"), roles));
             userRole.ifPresent(role -> preloadUser(userRepo, new User("user", "user@user.com", encoder.encode("user123"), role)));
         };
     }
-    
-    void preloadUser(UserRepository repo, User user)
-    {
-        if (repo.findByUsername(user.getUsername()).isPresent())
-        {
+
+    void preloadUser(UserRepository repo, User user) {
+        if (repo.findByUsername(user.getUsername()).isPresent()) {
             return;
         }
-        
+
         log.info("Preloading user: " + repo.save(user));
     }
-    
-    void preloadRole(RoleRepository repo, ERole role)
-    {
-        if (repo.findByName(role).isPresent())
-        {
+
+    void preloadRole(RoleRepository repo, ERole role) {
+        if (repo.findByName(role).isPresent()) {
             return;
         }
 

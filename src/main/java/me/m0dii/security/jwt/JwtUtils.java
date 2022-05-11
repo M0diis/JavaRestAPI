@@ -1,9 +1,6 @@
 package me.m0dii.security.jwt;
 
-import java.util.Date;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
+import io.jsonwebtoken.*;
 import me.m0dii.security.services.UserDetailsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,48 +9,83 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
-import io.jsonwebtoken.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Component
-public class JwtUtils
-{
+public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-    
+
     @Value("${m0dii.app.jwtSecret}")
     private String jwtSecret;
+
     @Value("${m0dii.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
     @Value("${m0dii.app.jwtCookieName}")
     private String jwtCookie;
-    
-    public String getJwtFromCookies(HttpServletRequest request)
-    {
+
+    /**
+     * Returns the JWT token from the request.
+     *
+     * @param request The request.
+     * @return The JWT token.
+     *
+     * @see HttpServletRequest
+     * @see Cookie
+     */
+    public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-        
+
         return cookie != null ? cookie.getValue() : null;
     }
-    
-    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal)
-    {
+
+    /**
+     * Generates a JWT token from the user's information.
+     *
+     * @param userPrincipal The user's information.
+     * @return The JWT token.
+     *
+     * @see UserDetailsImpl
+     * @see ResponseCookie
+     */
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        
+
         return ResponseCookie.from(jwtCookie, jwt)
                 .path("/api").maxAge(24 * 60 * 60L)
                 .httpOnly(true).build();
     }
-    
-    public ResponseCookie getCleanJwtCookie()
-    {
+
+    /**
+     * Generates a clean JWT token.
+     *
+     * @return The JWT token.
+     *
+     * @see ResponseCookie
+     */
+    public ResponseCookie getCleanJwtCookie() {
         return ResponseCookie.from(jwtCookie, null).path("/api").build();
     }
-    
-    public String getUserNameFromJwtToken(String token)
-    {
+
+    /**
+     * Gets the username from the JWT token.
+     *
+     * @param token The JWT token.
+     * @return The username.
+     */
+    public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
-    
-    public boolean validateJwtToken(String authToken)
-    {
+
+    /**
+     * Checks if the JWT token is valid.
+     *
+     * @param authToken The JWT token.
+     * @return True if the token is valid, false otherwise.
+     */
+    public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
@@ -70,9 +102,15 @@ public class JwtUtils
         }
         return false;
     }
-    
-    public String generateTokenFromUsername(String username)
-    {
+
+    /**
+     * Generates a JWT token from the username.
+     *
+     * @param username The username.
+     *
+     * @return The JWT token.
+     */
+    public String generateTokenFromUsername(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())

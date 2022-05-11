@@ -8,12 +8,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users",
-    uniqueConstraints = {
-            @UniqueConstraint(columnNames = "username"),
-            @UniqueConstraint(columnNames = "email")
-    })
-public class User
-{
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,98 +23,125 @@ public class User
     @NotBlank
     @Email
     private String email;
-    
+
     @NotBlank
     private String password;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    
+
     private Set<Role> roles = new HashSet<>();
-    
-    public User()
-    {
-    
+
+    public User() {
+
     }
-    
-    public User(String username, String email, String password)
-    {
+
+    public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-    
-    public User(String username, String email, String password, Role role)
-    {
+
+    public User(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
-        
+
         this.roles.add(role);
     }
-    
-    public User(String username, String email, String password, Set<Role> roles)
-    {
+
+    public User(String username, String email, String password, Set<Role> roles) {
         this.username = username;
         this.email = email;
         this.password = password;
-        
+
         this.roles.addAll(roles);
     }
-    
-    public Long getId()
-    {
+
+    /**
+     * Returns the user's id.
+     *
+     * @return the user's id
+     */
+    public Long getId() {
         return id;
     }
-    
-    public void setId(Long id)
-    {
+
+    /**
+     * Sets the user's id.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
         this.id = id;
     }
-    public String getUsername()
-    {
+
+    /**
+     * Returns the user's username.
+     *
+     * @return username
+     */
+    public String getUsername() {
         return username;
     }
-    
-    public void setUsername(String username)
-    {
+
+    /**
+     * Sets the user's username.
+     *
+     * @param username the username
+     */
+    public void setUsername(String username) {
         this.username = username;
     }
-    
-    public String getEmail()
-    {
+
+    /**
+     * Returns the user's email.
+     *
+     * @return the email
+     */
+    public String getEmail() {
         return email;
     }
-    
-    public void setEmail(String email)
-    {
+
+    /**
+     * Sets the user's email.
+     *
+     * @param email the email
+     */
+    public void setEmail(String email) {
         this.email = email;
     }
-    
-    public String getPassword()
-    {
+
+    /**
+     * Returns the user's password.
+     *
+     * @return the password
+     */
+    public String getPassword() {
         return password;
     }
-    
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-    
-    public Set<Role> getRoles()
-    {
+
+    /**
+     * Returns the user's roles.
+     *
+     * @return the roles
+     */
+    public Set<Role> getRoles() {
         return roles;
     }
-    
-    public void setRoles(Set<Role> roles)
-    {
+
+    /**
+     * Sets the user's roles.
+     *
+     * @param roles the roles
+     */
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +

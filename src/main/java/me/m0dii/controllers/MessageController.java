@@ -1,7 +1,6 @@
 package me.m0dii.controllers;
 
-import me.m0dii.advices.MessageNotFoundException;
-import me.m0dii.advices.UserNotFoundException;
+import me.m0dii.exceptions.MessageNotFoundException;
 import me.m0dii.models.Message;
 import me.m0dii.models.User;
 import me.m0dii.payload.request.MessageRequest;

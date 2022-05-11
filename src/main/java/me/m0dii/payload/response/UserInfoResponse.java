@@ -2,67 +2,103 @@ package me.m0dii.payload.response;
 
 import java.util.List;
 
-public class UserInfoResponse
-{
+public class UserInfoResponse {
+    private final List<String> roles;
     private String token;
-
     private Long id;
     private String username;
     private String email;
-    
-    private final List<String> roles;
-    
-    public UserInfoResponse(String jwt, Long id, String username, String email, List<String> roles)
-    {
+
+    public UserInfoResponse(String jwt, Long id, String username, String email, List<String> roles) {
         this.token = jwt;
         this.id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
     }
-    
-    public Long getId()
-    {
+
+    /**
+     * Returns the user's ID in the response.
+     *
+     * @return the id
+     */
+    public Long getId() {
         return id;
     }
-    
-    public void setId(Long id)
-    {
+
+    /**
+     * Sets the user's ID in the response.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
         this.id = id;
     }
-    
-    public String getEmail()
-    {
+
+    /**
+     * Returns the user's email in the response.
+     *
+     * @return the email
+     */
+    public String getEmail() {
         return email;
     }
-    
-    public void setEmail(String email)
-    {
+
+    /**
+     * Sets the user's email in the response.
+     *
+     * @param email the email
+     */
+    public void setEmail(String email) {
         this.email = email;
     }
-    
-    public String getUsername()
-    {
+
+    /**
+     * Returns the user's username in the response.
+     *
+     * @return the username
+     * @see #setUsername(String)
+     */
+    public String getUsername() {
         return username;
     }
-    
-    public void setUsername(String username)
-    {
+
+    /**
+     * Sets the user's username in the response.
+     *
+     * @param username the username
+     * @see #getUsername()
+     */
+    public void setUsername(String username) {
         this.username = username;
     }
-    
-    public String getToken()
-    {
+
+    /**
+     * Returns the user's JWT token in the response.
+     *
+     * @return the token
+     * @see #setToken(String)
+     */
+    public String getToken() {
         return token;
     }
-    
-    public void setToken(String token)
-    {
+
+    /**
+     * Sets the user's JWT token in the response.
+     *
+     * @param token the token
+     * @see #getToken()
+     */
+    public void setToken(String token) {
         this.token = token;
     }
-    
-    public List<String> getRoles()
-    {
+
+    /**
+     * Returns the user's roles in the response.
+     *
+     * @return the roles
+     */
+    public List<String> getRoles() {
         return roles;
     }
 }

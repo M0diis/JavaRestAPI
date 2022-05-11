@@ -19,7 +19,12 @@ public enum ERole
     {
         return name;
     }
-    
+
+    /**
+     * Returns the enum constant of this type with the specified name.
+     *
+     * @param name search name
+     */
     public static ERole getRole(String name)
     {
         return Arrays.stream(ERole.values()).filter(role -> role.getName().equalsIgnoreCase(name)).findFirst().orElse(null);

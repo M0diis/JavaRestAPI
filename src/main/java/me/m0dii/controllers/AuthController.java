@@ -50,7 +50,13 @@ public class AuthController
     
     @Autowired
     JwtUtils jwtUtils;
-    
+
+    /**
+     * @param loginRequest Login request
+     * @return {@link ResponseEntity} with {@link UserInfoResponse}
+     *
+     * @see LoginRequest
+     */
     @PostMapping({"/signin", "/login"})
     public ResponseEntity<UserInfoResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest)
     {
@@ -74,7 +80,13 @@ public class AuthController
                         userDetails.getEmail(),
                         roles));
     }
-    
+
+    /**
+     * @param signUpRequest Sign up request
+     * @return {@link ResponseEntity} with {@link MessageResponse}
+     *
+     * @see SignupRequest
+     */
     @PostMapping({"/signup", "/register"})
     public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
     {
@@ -133,6 +145,9 @@ public class AuthController
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
+    /**
+     * @return {@link ResponseEntity} with {@link MessageResponse}
+     */
     @PostMapping({"/signout", "/logout", "/logoff"})
     public ResponseEntity<MessageResponse> logoutUser()
     {

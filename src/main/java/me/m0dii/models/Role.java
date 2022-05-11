@@ -4,54 +4,72 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class Role
-{
+public class Role {
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private int id;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ERole name;
-    
-    public Role()
-    {
-    
+
+    public Role() {
+
     }
-    
-    public Role(ERole name)
-    {
+
+    public Role(ERole name) {
         this.name = name;
     }
-    
-    public int getId()
-    {
+
+    /**
+     * Returns the id of the role.
+     *
+     * @return role id
+     */
+    public int getId() {
         return id;
     }
-    
-    public void setId(int id)
-    {
+
+    /**
+     * Sets the id of the role.
+     *
+     * @param id role id
+     */
+    public void setId(int id) {
         this.id = id;
     }
-    
-    public ERole getName()
-    {
+
+    /**
+     * Returns the name of the role as an enum.
+     *
+     * @return role enum
+     * @see #getRoleName()
+     */
+    public ERole getName() {
         return name;
     }
-    
-    public void setName(ERole role)
-    {
+
+    /**
+     * Sets the role enum.
+     *
+     * @param role enum
+     */
+    public void setName(ERole role) {
         this.name = role;
     }
-    
-    public String getRoleName()
-    {
+
+    /**
+     * Returns the name of the role as a string.
+     *
+     * @return role string
+     * @see #getName()
+     */
+    public String getRoleName() {
         return name.getName();
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Role{" +
                 "id=" + id +
                 ", name=" + name +

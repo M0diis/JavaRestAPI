@@ -2,25 +2,21 @@ package me.m0dii.payload.response;
 
 import me.m0dii.models.User;
 
-import java.util.Date;
-
-public class UserStatResponse
-{
+public class UserStatResponse {
     private User user;
-    
+
     private int messageCount;
-    
+
     private String firstMessageDate;
-    
+
     private String lastMessageDate;
-    
+
     private double averageMessageLength;
-    
+
     private String lastMessageContent;
-    
+
     public UserStatResponse(User user, int messageCount, String firstMessage, String lastMessage, double averageMessageLength,
-                            String lastMessageContent)
-    {
+                            String lastMessageContent) {
         this.user = user;
         this.messageCount = messageCount;
         this.firstMessageDate = firstMessage;
@@ -28,39 +24,64 @@ public class UserStatResponse
         this.averageMessageLength = averageMessageLength;
         this.lastMessageContent = lastMessageContent;
     }
-    
-    public User getUser()
-    {
+
+    /**
+     * Returns the user.
+     *
+     * @return the user
+     * @see User
+     */
+    public User getUser() {
         return user;
     }
-    public int getMessageCount()
-    {
+
+    /**
+     * Returns the message count.
+     *
+     * @return the message count
+     */
+    public int getMessageCount() {
         return messageCount;
     }
-    
-    public String getFirstMessageDate()
-    {
+
+    /**
+     * Returns the first message date as string in "yyyy-MM-dd HH:mm:ss" format.
+     *
+     * @return date as string
+     */
+    public String getFirstMessageDate() {
         return firstMessageDate;
     }
-    
-    public String getLastMessageDate()
-    {
+
+    /**
+     * Returns the last message date as string in "yyyy-MM-dd HH:mm:ss" format.
+     *
+     * @return date as string
+     */
+    public String getLastMessageDate() {
         return lastMessageDate;
     }
-    
-    public double getAverageMessageLength()
-    {
+
+    /**
+     * Returns the average message length.
+     *
+     * @return the average length
+     */
+    public double getAverageMessageLength() {
         return averageMessageLength;
     }
-    
-    public String getLastMessageContent()
-    {
+
+    /**
+     * Returns the last message content.
+     *
+     * @return the message content
+     */
+    public String getLastMessageContent() {
         return lastMessageContent;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "UserStatResponse{" +
                 "user=" + user +
                 ", messageCount=" + messageCount +

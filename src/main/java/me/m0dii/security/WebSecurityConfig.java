@@ -37,7 +37,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     {
         return new AuthTokenFilter();
     }
-    
+
+    /**
+     * Configure the authentication manager.
+     *
+     * @param authenticationManagerBuilder the authentication manager builder
+     * @throws Exception
+     *
+     * @see AuthenticationManagerBuilder
+     */
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception
     {
@@ -45,14 +53,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-    
+
+    /**
+     * Configure the http security.
+     *
+     * @return authentication manager
+     * @throws Exception
+     *
+     * @see AuthenticationManager
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception
     {
         return super.authenticationManagerBean();
     }
-    
+
+    /**
+     * Returns the password encoder.
+     *
+     * @return the encoder
+     *
+     * @see PasswordEncoder
+     * @see BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder()
     {
@@ -75,7 +99,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
             "/h2-console/**",
             "/h2-console"
     };
-    
+
+    /**
+     * Configures the http security.
+     * Adds jwt token filter to the filter chain.
+     *
+     * @param http the http
+     * @throws Exception
+     *
+     * @see HttpSecurity
+     * @see UsernamePasswordAuthenticationFilter
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {

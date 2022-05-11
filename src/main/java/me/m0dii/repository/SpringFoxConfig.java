@@ -8,8 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SpringFoxConfig
-{
+public class SpringFoxConfig {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()

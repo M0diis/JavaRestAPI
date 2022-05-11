@@ -1,4 +1,4 @@
-package me.m0dii.advices;
+package me.m0dii.exceptions;
 
 public class UserNotFoundException extends RuntimeException
 {

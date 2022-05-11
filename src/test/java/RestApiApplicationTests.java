@@ -15,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,105 +25,90 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = RestApiApplication.class)
 @EnableConfigurationProperties
 @AutoConfigureMockMvc
-class RestApiApplicationTests
-{
-    @Autowired
-    private UserRepository userRepository;
-    
-    @Autowired
-    private MessageRepository messageRepository;
-    
-    @Autowired
-    private RoleRepository roleRepository;
-    
+class RestApiApplicationTests {
     @Autowired
     AuthenticationManager authenticationManager;
-    
     @Autowired
     JwtUtils jwtUtils;
-    
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private MessageRepository messageRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private MockMvc mvc;
-    
+
     @Test
-    void contextLoads()
-    {
+    void contextLoads() {
         assertNotNull(userRepository);
         assertNotNull(messageRepository);
         assertNotNull(roleRepository);
     }
-    
+
     @Test
-    void checkIfAdminUserExists()
-    {
+    void checkIfAdminUserExists() {
         assertTrue(userRepository.existsByUsername("admin"));
         assertTrue(userRepository.existsByEmail("admin@admin.com"));
     }
-    
+
     @Test
-    void getAllUsers() throws Exception
-    {
+    void getAllUsers() throws Exception {
         mvc.perform(get("/api/test/getAllUsers")).andExpect(status().isOk());
     }
-    
+
     @Test
-    void checkAllAccessWithoutAuthorization() throws Exception
-    {
+    void checkAllAccessWithoutAuthorization() throws Exception {
         mvc.perform(get("/api/test/all")).andExpect(status().isOk());
     }
-    
+
     @Test
-    void checkModAccessWithoutAuthorization() throws Exception
-    {
+    void checkModAccessWithoutAuthorization() throws Exception {
         mvc.perform(get("/api/test/mod")).andExpect(status().isUnauthorized());
     }
-    
+
     @Test
-    void checkAdminAccessWithoutAuthorization() throws Exception
-    {
+    void checkAdminAccessWithoutAuthorization() throws Exception {
         mvc.perform(get("/api/test/admin")).andExpect(status().isUnauthorized());
     }
-    
-    MockHttpServletResponse login(String username, String password) throws Exception
-    {
+
+    MockHttpServletResponse login(String username, String password) throws Exception {
         LoginRequest loginRequest = new LoginRequest(username, password);
-        
+
         ObjectMapper mapper = new ObjectMapper();
-        
+
         String json = mapper.writeValueAsString(loginRequest);
-        
+
         return mvc.perform(post("/api/auth/signin")
-                .contentType("application/json")
-                .content(json))
+                        .contentType("application/json")
+                        .content(json))
                 .andReturn()
                 .getResponse();
     }
-    
+
     @Test
-    void checkAdminAccessWithAuthorizationAsUser() throws Exception
-    {
+    void checkAdminAccessWithAuthorizationAsUser() throws Exception {
         MockHttpServletResponse response = login("user", "user123");
-    
+
         Cookie cookie = response.getCookie("m0dii-jwt");
-    
+
         assertNotNull(cookie);
-    
+
         mvc.perform(get("/api/test/admin")
-            .header("Authorization", "Bearer " + cookie.getValue()))
-            .andExpect(status().isForbidden());
+                        .header("Authorization", "Bearer " + cookie.getValue()))
+                .andExpect(status().isForbidden());
     }
-    
+
     @Test
-    void checkAdminAccessWithAuthorizationAsAdmin() throws Exception
-    {
+    void checkAdminAccessWithAuthorizationAsAdmin() throws Exception {
         MockHttpServletResponse response = login("admin", "admin123");
-        
+
         Cookie cookie = response.getCookie("m0dii-jwt");
-    
+
         assertNotNull(cookie);
-        
+
         mvc.perform(get("/api/test/admin")
-            .header("Authorization", "Bearer " + cookie.getValue()))
-            .andExpect(status().isOk());
+                        .header("Authorization", "Bearer " + cookie.getValue()))
+                .andExpect(status().isOk());
     }
 }
