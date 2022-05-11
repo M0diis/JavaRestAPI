@@ -16,6 +16,9 @@ on:
 
 permissions:
   contents: read
+  checks: write
+  pull-requests: write
+  issues: read
 
 jobs:
   build:
@@ -40,3 +43,4 @@ jobs:
       if: always()
       with:
         files: "build/test-results/**/*.xml"
+        
