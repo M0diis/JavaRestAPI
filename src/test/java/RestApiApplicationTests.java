@@ -53,11 +53,6 @@ class RestApiApplicationTests {
     }
 
     @Test
-    void getAllUsers() throws Exception {
-        mvc.perform(get("/api/test/getAllUsers")).andExpect(status().isOk());
-    }
-
-    @Test
     void checkAllAccessWithoutAuthorization() throws Exception {
         mvc.perform(get("/api/test/all")).andExpect(status().isOk());
     }
